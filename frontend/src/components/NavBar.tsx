@@ -39,13 +39,34 @@ const NavBar: React.FC = () => {
           </Button>
         ) : (
           <>
-            <Button
-              sx={{ color: '#fff', fontWeight: 600, mx: 1, textTransform: 'none', boxShadow: '0 2px 8px rgba(255,179,71,0.15)' }}
-              component={Link}
-              to="/admin"
-            >
-              Admin
-            </Button>
+            {/* Navigation links for all roles */}
+            {localStorage.getItem('role') === 'admin' && (
+              <Button
+                sx={{ color: '#fff', fontWeight: 600, mx: 1, textTransform: 'none', boxShadow: '0 2px 8px rgba(255,179,71,0.15)' }}
+                component={Link}
+                to="/admin"
+              >
+                Admin
+              </Button>
+            )}
+            {localStorage.getItem('role') === 'admin' && (
+              <>
+                <Button
+                  sx={{ color: '#fff', fontWeight: 600, mx: 1, textTransform: 'none', boxShadow: '0 2px 8px rgba(255,179,71,0.15)' }}
+                  component={Link}
+                  to="/admin/mentees"
+                >
+                  Mentees
+                </Button>
+                <Button
+                  sx={{ color: '#fff', fontWeight: 600, mx: 1, textTransform: 'none', boxShadow: '0 2px 8px rgba(255,179,71,0.15)' }}
+                  component={Link}
+                  to="/admin/mentors"
+                >
+                  Mentors
+                </Button>
+              </>
+            )}
             {localStorage.getItem('role') === 'mentee' && (
               <Button
                 sx={{ color: '#fff', fontWeight: 600, mx: 1, textTransform: 'none', boxShadow: '0 2px 8px rgba(255,179,71,0.15)' }}
@@ -73,15 +94,6 @@ const NavBar: React.FC = () => {
                 Requests
               </Button>
             )}
-            {localStorage.getItem('role') === 'mentee' && (
-              <Button
-                sx={{ color: '#fff', fontWeight: 600, mx: 1, textTransform: 'none', boxShadow: '0 2px 8px rgba(255,179,71,0.15)' }}
-                component={Link}
-                to="/mentee"
-              >
-                Mentee
-              </Button>
-            )}
             <Button
               sx={{ color: '#fff', fontWeight: 600, mx: 1, textTransform: 'none', boxShadow: '0 2px 8px rgba(255,179,71,0.15)' }}
               component={Link}
@@ -89,13 +101,16 @@ const NavBar: React.FC = () => {
             >
               Profile
             </Button>
-            <Button
-              sx={{ color: '#fff', fontWeight: 600, mx: 1, textTransform: 'none', boxShadow: '0 2px 8px rgba(71,179,255,0.15)' }}
-              component={Link}
-              to="/book-session"
-            >
-              Book Session
-            </Button>
+            {localStorage.getItem('role') !== 'admin' && (
+              <Button
+                sx={{ color: '#fff', fontWeight: 600, mx: 1, textTransform: 'none', boxShadow: '0 2px 8px rgba(71,179,255,0.15)' }}
+                component={Link}
+                to="/book-session"
+              >
+                Book Session
+              </Button>
+            )}
+            {/* Always show logout last */}
             <Button
               sx={{ color: '#fff', fontWeight: 600, mx: 1, textTransform: 'none', boxShadow: '0 2px 8px rgba(255,71,71,0.15)' }}
               onClick={handleLogout}

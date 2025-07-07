@@ -13,6 +13,8 @@ import MentorProfilePage from './pages/MentorProfilePage';
 import MentorRequestsPage from './pages/MentorRequestsPage';
 import MenteeListPage from './pages/MenteeListPage';
 import BookSessionPage from './pages/BookSessionPage';
+import AdminMenteesPage from './pages/AdminMenteesPage';
+import AdminMentorsPage from './pages/AdminMentorsPage';
 
 const App: React.FC = () => {
   return (
@@ -30,6 +32,8 @@ const App: React.FC = () => {
         <Route path="/mentors/:id" element={<MentorProfilePage />} />
         <Route path="/mentor/requests" element={<MentorRequestsPage />} />
         <Route path="/book-session" element={<BookSessionPage />} />
+        <Route path="/admin/mentees" element={<AdminMenteesPage />} />
+        <Route path="/admin/mentors" element={<AdminMentorsPage />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>

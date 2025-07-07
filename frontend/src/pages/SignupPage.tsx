@@ -16,6 +16,7 @@ const SignupPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState('mentee');
+  const [adminKey, setAdminKey] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -40,10 +41,14 @@ const SignupPage: React.FC = () => {
     }
     // Call backend API here
     try {
+      const body: any = { name, email, password, role };
+      if (role === 'admin') {
+        body.adminKey = adminKey;
+      }
       const response = await fetch(`${apiUrl}/api/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password, role }),
+        body: JSON.stringify(body),
       });
       const data = await response.json();
       if (!response.ok) {
@@ -112,6 +117,17 @@ const SignupPage: React.FC = () => {
             </MenuItem>
           ))}
         </TextField>
+        {role === 'admin' && (
+          <TextField
+            label="Admin Key"
+            type="password"
+            value={adminKey}
+            onChange={e => setAdminKey(e.target.value)}
+            fullWidth
+            margin="normal"
+            required
+          />
+        )}
         <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
           Sign Up
         </Button>

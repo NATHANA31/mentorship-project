@@ -26,7 +26,12 @@ const MentorProfilePage: React.FC = () => {
         if (!res.ok || !data.length) {
           setError('Mentor not found.');
         } else {
-          setMentor(data[0]);
+          const foundMentor = data.find((m: any) => m._id === id);
+          if (foundMentor) {
+            setMentor(foundMentor);
+          } else {
+            setError('Mentor not found.');
+          }
         }
       } catch (err) {
         setError('Server error.');

@@ -19,7 +19,15 @@ router.post('/signup', [
     res.status(400).json({ errors: errors.array() });
     return;
   }
-  const { name, email, password, role } = req.body;
+  const { name, email, password, role, adminKey } = req.body;
+  // Admin key validation
+  if (role === 'admin') {
+    const ADMIN_SIGNUP_KEY = process.env.ADMIN_SIGNUP_KEY;
+    if (!adminKey || adminKey !== ADMIN_SIGNUP_KEY) {
+      res.status(400).json({ errors: [{ msg: 'Invalid admin key' }] });
+      return;
+    }
+  }
   try {
     let user = await User.findOne({ email });
     if (user) {
@@ -83,6 +91,15 @@ function authMiddleware(req: Request, res: Response, next: Function): void {
     res.status(401).json({ errors: [{ msg: 'Token is not valid' }] });
     return;
   }
+}
+
+// Middleware to check if user is admin
+function adminOnlyMiddleware(req: Request, res: Response, next: Function): void {
+  if (!(req as any).user || (req as any).user.role !== 'admin') {
+    res.status(403).json({ errors: [{ msg: 'Admin access required' }] });
+    return;
+  }
+  next();
 }
 
 // Get current user's profile
@@ -234,6 +251,30 @@ router.get('/mentees', authMiddleware, async (req: Request, res: Response) => {
       .sort({ createdAt: -1 });
     const mentees = acceptedRequests.map(r => r.mentee);
     res.json(mentees);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ errors: [{ msg: 'Server error' }] });
+  }
+});
+
+// Admin: Get all mentees
+router.get('/all-mentees', authMiddleware, adminOnlyMiddleware, async (req: Request, res: Response) => {
+  try {
+    const mentees = await User.find({ role: 'mentee' }).select('-password');
+    res.json(mentees);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ errors: [{ msg: 'Server error' }] });
+  }
+});
+
+// Admin: Get site statistics (number of mentors, mentees, total users)
+router.get('/site-stats', authMiddleware, adminOnlyMiddleware, async (req: Request, res: Response) => {
+  try {
+    const mentorCount = await User.countDocuments({ role: 'mentor' });
+    const menteeCount = await User.countDocuments({ role: 'mentee' });
+    const totalCount = await User.countDocuments({});
+    res.json({ mentorCount, menteeCount, totalCount });
   } catch (err) {
     console.error(err);
     res.status(500).json({ errors: [{ msg: 'Server error' }] });

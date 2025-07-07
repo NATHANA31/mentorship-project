@@ -46,13 +46,24 @@ const NavBar: React.FC = () => {
             >
               Admin
             </Button>
-            <Button
-              sx={{ color: '#fff', fontWeight: 600, mx: 1, textTransform: 'none', boxShadow: '0 2px 8px rgba(255,179,71,0.15)' }}
-              component={Link}
-              to="/mentor"
-            >
-              Mentor
-            </Button>
+            {localStorage.getItem('role') === 'mentee' && (
+              <Button
+                sx={{ color: '#fff', fontWeight: 600, mx: 1, textTransform: 'none', boxShadow: '0 2px 8px rgba(255,179,71,0.15)' }}
+                component={Link}
+                to="/mentors"
+              >
+                Mentors
+              </Button>
+            )}
+            {localStorage.getItem('role') === 'mentor' && (
+              <Button
+                sx={{ color: '#fff', fontWeight: 600, mx: 1, textTransform: 'none', boxShadow: '0 2px 8px rgba(255,179,71,0.15)' }}
+                component={Link}
+                to="/mentor"
+              >
+                Mentor Dashboard
+              </Button>
+            )}
             {localStorage.getItem('role') === 'mentor' && (
               <Button
                 sx={{ color: '#fff', fontWeight: 600, mx: 1, textTransform: 'none', boxShadow: '0 2px 8px rgba(255,179,71,0.15)' }}
@@ -62,13 +73,15 @@ const NavBar: React.FC = () => {
                 Requests
               </Button>
             )}
-            <Button
-              sx={{ color: '#fff', fontWeight: 600, mx: 1, textTransform: 'none', boxShadow: '0 2px 8px rgba(255,179,71,0.15)' }}
-              component={Link}
-              to="/mentee"
-            >
-              Mentee
-            </Button>
+            {localStorage.getItem('role') === 'mentee' && (
+              <Button
+                sx={{ color: '#fff', fontWeight: 600, mx: 1, textTransform: 'none', boxShadow: '0 2px 8px rgba(255,179,71,0.15)' }}
+                component={Link}
+                to="/mentee"
+              >
+                Mentee
+              </Button>
+            )}
             <Button
               sx={{ color: '#fff', fontWeight: 600, mx: 1, textTransform: 'none', boxShadow: '0 2px 8px rgba(255,179,71,0.15)' }}
               component={Link}
